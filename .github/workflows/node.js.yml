@@ -1,35 +1,38 @@
-name: Node.js CI
+name: Build Angular App
 
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN
+permissions:
+  contents: read
 
 jobs:
+  # Build job
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # Veja o cronograma de lançamentos suportados do Node.js em https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Build the code
-      run: npm run build --if-present
-
-    - name: Run tests
-      run: npm test
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build the Angular app
+        run: npm run build -- --output-path=dist
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: angular-build
+          path: dist/
