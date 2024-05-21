@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write  # Adiciona permissão de escrita para conteúdos do repositório
   pages: write  # Adiciona permissão de escrita para GitHub Pages
   id-token: write  # Necessário para GitHub Pages
 
