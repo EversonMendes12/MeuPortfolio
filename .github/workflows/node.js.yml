@@ -26,7 +26,7 @@ jobs:
         run: npm install
       
       - name: Build the Angular app
-        run: npm run build -- --output-path=dist
+        run: ng build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
