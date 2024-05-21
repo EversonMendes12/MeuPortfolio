@@ -1,19 +1,16 @@
-name: Build Angular App
+name: Build and Deploy Angular App
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["master"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN
 permissions:
   contents: read
+  pages: write  # Adiciona permissão de escrita para GitHub Pages
+  id-token: write  # Necessário para GitHub Pages
 
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
@@ -30,9 +27,28 @@ jobs:
       
       - name: Build the Angular app
         run: npm run build -- --output-path=dist
-      
+
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: angular-build
           path: dist/
+
+  deploy:
+    needs: build  # Garante que o job de deploy só execute após o build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: angular-build
+          path: dist/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
