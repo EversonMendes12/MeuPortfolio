@@ -1,20 +1,22 @@
-name: CI
+name: Build and Deploy Angular App
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
   workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository
+      - name: Checkout
         uses: actions/checkout@v4
-
+      
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -22,16 +24,31 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Run Angular build
+      
+      - name: Build the Angular app
         run: npm run build
 
-      - name: Archive build output
-        run: tar -czf build-output.tar.gz ./dist
-
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: build-output
-          path: build-output.tar.gz
-          
+          name: angular-build
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: angular-build
+          path: dist/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
