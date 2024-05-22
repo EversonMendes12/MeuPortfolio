@@ -62,8 +62,12 @@
 
   </div>
 
+  <button mat-button color="basic" (click)="toggleMenu()" *ngIf="this.isMenuOpen">
+    <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
   <main>
-    <app-main></app-main>
+    <app-main>
+    </app-main>
   </main>
 
 </body>

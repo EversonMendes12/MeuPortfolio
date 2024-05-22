@@ -12,7 +12,7 @@ body {
     width: 20%;
     background-color: #163853;
     flex-direction: column;
-    padding-left: 5%;
+    padding: 1%;
 }
 
 .photoCircle {
@@ -97,7 +97,8 @@ body {
 /* ================================================================== */
 
 main {
-    width: 80%;
+    min-width: 70%;
+    max-width: 100%;
     margin-bottom: 10vw;
 }
 
@@ -112,4 +113,14 @@ footer {
     background-color: #163853;
     display: flex;
     justify-content: center;
+}
+
+@media screen and (max-width: 767px) {
+    .toolbar {
+        display: flex;
+        width: 40%;
+        background-color: #163853;
+        flex-direction: column;
+        padding: 1%;
+    }
 }

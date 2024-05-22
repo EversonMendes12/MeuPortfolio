@@ -1,10 +1,9 @@
 .field {
     width: 86%;
-    padding-left: 10%;
+    padding-left: 2%;
     padding-top: 5vw;
     display: flex;
     flex-direction: column;
-    
 }
 
 .name {
