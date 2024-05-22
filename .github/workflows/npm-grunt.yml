@@ -50,10 +50,13 @@ jobs:
           name: angular-build
           path: dist/
 
-      - name: Deploy to master branch
+      - name: Create deploy branch
+        run: git checkout -b deploy
+
+      - name: Push changes to deploy branch
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
           git add .
-          git commit -m "Deploy to master branch"
-          git push origin HEAD:master
+          git commit -m "Deploy to deploy branch"
+          git push origin deploy
